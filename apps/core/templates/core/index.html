@@ -1,5 +1,71 @@
 {% extends 'base.html' %}
 
 {% block main %}
-    Seja bem vindo
+    Olá {{ usuario.funcionario.nome }} - <a href="{% url 'logout' %}">Sair</a>
+    <br>
+    {% if usuario.funcionario.empresa %}
+        <a href="">Editar empresa</a>
+    {% else %}
+        <a href="">Criar empresa</a>
+    {% endif %}
+    <br>
+   <div class="row">
+       <div class="col">
+        <div class="card" style="width: 18rem;">
+          <h2>
+              <i class="fa fa-users" style="font-size:48px;color:blue"></i>
+              <a href="#">Empregados</a>
+          </h2>
+        </div>
+      </div>
+
+       <div class="col">
+        <div class="card" style="width: 18rem;">
+          <h2>
+              <i class="fa fa-clock-o" style="font-size:48px;color:blue"></i>
+              <a href="#">Banco de horas</a>
+          </h2>
+        </div>
+      </div>
+
+       <div class="col">
+        <div class="card" style="width: 18rem;">
+
+          <h2>
+              <i class="fa fa-book" style="font-size:48px;color:blue"></i>
+              <a href="#">Documentos</a>
+          </h2>
+        </div>
+      </div>
+   </div>
+
+    <br>
+   <div class="row">
+    <div class="col">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Funcionario</h5>
+
+          </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+          <div class="card-header">Banco de horas</div>
+          <div class="card-body">
+
+          </div>
+        </div>
+    </div>
+       <div class="col">
+    <div class="card border-danger mb-3" style="max-width: 18rem;">
+      <div class="card-header">Documentos</div>
+      <div class="card-body text-danger">
+
+      </div>
+    </div>
+    </div>
+
+  </div>
 {% endblock %}
