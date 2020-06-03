@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form }}
+
+    <button type="submit" class="btn btn-main">Salvar</button>
+</form>
+
+<br>
+
+<br>
+<h2>Documentos</h2>
+
+
+<a href="" class="btn btn-success">
+    Adicionar documento
+</a>
+
+<br>
+<h2>Banco de horas</h2>
+
+
+{% endblock %}
