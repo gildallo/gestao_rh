@@ -5,14 +5,14 @@
     List
 <br>
     {% for departamento in object_list %}
-        <a href="">
+        <a href="{% url 'update_departamento' departamento.id %}">
             {{ departamento }}
         </a>
-        <a href="">
+        <a href="{% url 'delete_departamento' departamento.id %}">
             Deletar
         </a>
         <br>
     {% endfor %}
 
-    <a href="" class="btn btn-info"> Novo </a>
+    <a href="{% url 'create_departamento' %}" class="btn btn-info"> Novo </a>
 {% endblock %}

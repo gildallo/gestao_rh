@@ -7,6 +7,8 @@
     <br>
     <a href="{% url 'list_departamentos' %}">Gerenciar Departamentos</a>
     <br>
+    <a href="{% url 'list_hora_extra' %}">Gerenciar Banco de horas</a>
+    <br>
     {% if usuario.funcionario.empresa %}
         <a href="{% url 'edit_empresa' usuario.funcionario.empresa.id %}">Editar empresa</a>
     {% else %}

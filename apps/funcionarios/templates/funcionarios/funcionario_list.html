@@ -2,7 +2,7 @@
 
 {% block main %}
 
-    List
+    Lista de Funcionários
 <br>
     {% for funcionario in object_list %}
         <a href="{% url 'update_funcionario' funcionario.id %}">
@@ -15,9 +15,6 @@
     {% endfor %}
 
     <a href="{% url 'create_funcionario' %}" class="btn btn-info"> Novo </a>
-    <a href="" class="btn btn-info">
-        {{ report_button }}
-    </a>
     <a href="" class="btn btn-info">
         Relatorio de funcionarios HTML
     </a>
