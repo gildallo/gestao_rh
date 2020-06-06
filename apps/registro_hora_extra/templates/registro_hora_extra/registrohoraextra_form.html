@@ -15,8 +15,23 @@
     <a href="{% url 'delete_hora_extra' object.id %}" class="btn btn-danger">
         Deletar
     </a>
+
+    <button {% if not object.utilizada %} style="visibility: hidden" {% endif %} onclick="utilizouHoraExtra({{ object.id }}, 0)"
+            class="btn btn-info" type="button" id="btRetornar">Tornar utilizável</button>
+    <button {% if object.utilizada %} style="visibility: hidden" {% endif %} onclick="utilizouHoraExtra({{ object.id }}, 1)"
+            class="btn btn-info" type="button" id="btUtilizar">Marcar como utilizada</button>
+
     {% endif %}
 
 </form>
 
+<h2 id="horas_atualizadas"> {{ object.funcionario.total_horas_extra }}</h2>
+
+<br>
+<p id="mensagem"></p>
+{% endblock %}
+
+{% block static %}
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/funcoes-ajax.js' %}"></script>
 {% endblock %}
