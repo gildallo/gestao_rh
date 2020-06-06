@@ -1,0 +1,50 @@
+# Instalar gunicorn
+# pip install gunicorn
+
+# Criar o socket para o projeto
+sudo nano /etc/systemd/system/gunicorn_gestaorh.socket
+
+    [Unit]
+    Description=gestao rh socket
+
+    [Socket]
+    ListenStream=/run/gunicorn_gestaorh.sock
+
+    [Install]
+    WantedBy=sockets.target
+
+# Criar o service para o projeto
+sudo nano /etc/systemd/system/gunicorn_gestaorh.service
+
+    [Unit]
+    Description=gestaorh daemon
+    Requires=gunicorn_gestaorh.socket
+    After=network.target
+
+    [Service]
+    User=gilcimar
+    Group=nginx
+    WorkingDirectory=/<diretório do projeto>/gestao_rh_prod
+    ExecStart=/usr/local/bin/gunicorn \
+              --access-logfile - \
+              --workers 3 \
+              --bind unix:/run/gunicorn_gestaorh.sock \
+              gestao_rh.wsgi:application
+
+    [Install]
+    WantedBy=multi-user.target
+
+# Iniciar o socket
+sudo systemctl start gunicorn_gestaorh.socket
+
+# Habilitar para o socket iniciar com a máquina
+sudo systemctl enable gunicorn_gestaorh.socket
+
+# Iniciar o service
+sudo systemctl start gunicorn_gestaorh.services
+
+# Habilitar para o service iniciar com a máquina
+sudo systemctl enable gunicorn_gestaorh.service
+
+# Se apresentar algum problema para iniciar o gunicorn service use o comando:
+sudo systemctl daemon-reload

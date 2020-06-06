@@ -10,3 +10,9 @@ $ python -m venv nomedoambiente
 Comando para instalar as bibliotecas requeridas
 
 $ pip install -r requirements.txt
+
+Foi criado um ambiente de produção utilizando um linux Fedora, na pasta "Utils" encontra-se os exemplos de configuração usado para o gunicorn e nginx.
+
+Para o nginx rodar os arquivos estáticos corretamente, é necessário utilizar o comando a seguir para compilar os arquivos estáticos:
+
+$ python manage.py collectstatic

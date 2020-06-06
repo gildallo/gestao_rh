@@ -1,0 +1,64 @@
+# Instale o nginx no Fedora
+sudo dnf install nginx
+
+#  Colocar o usuário de execução do nginx que tenha permissão nos arquivos estaticos
+sudo nano /etc/nginx/nginx.conf
+
+# Crie um server
+sudo nano /etc/nginx/conf.d/default
+
+# PARA HTTP (:80)
+server {
+	listen 80;
+	listen [::]:80;
+
+	index index.html index.htm index.nginx-debian.html index.php;
+
+	server_name _;
+
+	location /static/ {
+		root /home/<diretorio do projeto>/gestao_rh/;
+	}
+
+	location /media {
+		alias /home/<diretorio do projeto>/gestao_rh/media/;
+	}
+
+	location / {
+		proxy_pass http://unix:/run/gunicorn_gestaorh.sock;
+	}
+
+	location ~ /\.ht {
+		deny all;
+	}
+
+	location ~ /\. {
+		access_log off;
+		log_not_found off;
+		deny all;
+	}
+
+	gzip on;
+	gzip_disable "msie6";
+
+	gzip_comp_level 6;
+	gzip_min_length 1100;
+	gzip_buffers 4 32k;
+	gzip_proxied any;
+	gzip_types
+		text/plain
+		text/css
+		text/js
+		text/xml
+		text/javascript
+		application/javascript
+		application/x-javascript
+		application/json
+		application/xml
+		application/rss+xml
+		image/svg+xml;
+
+	access_log off;
+    #access_log  /var/log/nginx/gestaorh-access.log;
+	error_log   /var/log/nginx/gestaorh-error.log;
+}
