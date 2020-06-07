@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from apps.core.serializers import UserSerializer, GroupSerializer
+from django.http import HttpResponse
+from .tasks import send_relatorio
 
 @login_required
 def home(request):
@@ -18,3 +20,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+def celery(request):
+    send_relatorio.delay()
+    return HttpResponse('Tarefa incluida na fila para execucao')
