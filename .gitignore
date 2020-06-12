@@ -1,4 +1,8 @@
 *.pyc
 .DS_Store
+.git
+.idea
+.idea/gestao_rh.iml
+.idea/misc.xml
 gestao_rh/gestaorh_settings.py
 media
