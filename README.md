@@ -53,6 +53,7 @@ o deploy foi realizado em um Fedora 32, utilizando Docker, Gunicorn, Nginx, Post
 	gunicorn --bind :8001 --workers 3 gestao_rh.wsgi:application >> $LOG<br>
 
 	- Inciar o container criado: docker start django-app02
+	- Conferir se os serviços utilizados estão onlines: Postgres, Redis, Nginx
 	- Rodar o arquivo run-deploy.sh: docker exec -d -w /django-app02/deploy/ django-app02 ./run-deploy.sh
 	- Configurar o virtualhost no nginx (É importante verificar a permissão dos diretos dos arquivos estáticos, toda a arvore deve estar acessível).
 	- Recarregar configurações do nginx: nginx -s reload
