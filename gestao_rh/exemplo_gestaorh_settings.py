@@ -24,4 +24,3 @@ DEFAULT_FROM_EMAIL = 'Nome da Pessoa <xxxxx@gmail.com>'
 CONTACT_EMAIL = 'xxxxxx@gmail.com'
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1s:6379'

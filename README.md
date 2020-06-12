@@ -7,6 +7,10 @@ Mas no curso criamos um ambiente para desenvolvimento usando o virtualenv, segue
 
 $ python -m venv nomedoambiente
 
+Comando para rodar o celery na aplicação:
+
+$ celery -A gestao_rh worker -l info
+
 # Deploy em ambiente de produção conforme aula
 
 Foi criado um ambiente de produção conforme instruido pelo instrutor utilizando um linux Fedora, na pasta "Utils" 
@@ -35,7 +39,8 @@ o deploy foi realizado em um Fedora 32, utilizando Docker, Gunicorn, Nginx, Post
 	- Clonar a aplicação no diretório do host que corresponde ao volume.
 	- Configurar o postgresql do host para conversar com o container(liberar ip no pg_hba.conf)
 	- Configurar o settings.py (Variáveis e banco)
-	- Criei um arquivo run-deploy.sh na pasta deploy no mesmo diretório do app, com o conteúdo a seguir:
+	- Criei um arquivo run-deploy.sh na pasta deploy no mesmo diretório do app, com o conteúdo a seguir, 
+	as configurações de logs devem ser configuradas conforme necessidade:
 		
 	\#!/usr/bin/env bash<br>
 	cd /django-app02/gestao_rh/<br>
@@ -50,7 +55,7 @@ o deploy foi realizado em um Fedora 32, utilizando Docker, Gunicorn, Nginx, Post
 	echo "==================== Gerando arquivos estáticos ====================" >> $LOG<br>
 	python3 manage.py collectstatic --noinput >> $LOG<br>
 	echo "==================== Iniciando o gunicorn ====================" >> $LOG<br>
-	gunicorn --bind :8001 --workers 3 gestao_rh.wsgi:application >> $LOG<br>
+	gunicorn --bind :8001 --workers 3 --log-level debug  --error-logfile /django-app02/deploy/logs/gunicorn-error.log  --access-logfile /django-app02/deploy/logs/gunicorn-access.log gestao_rh.wsgi:application >> $LOG<br>
 
 	- Inciar o container criado: docker start django-app02
 	- Conferir se os serviços utilizados estão onlines: Postgres, Redis, Nginx
