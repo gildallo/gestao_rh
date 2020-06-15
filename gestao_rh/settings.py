@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'apps.core',
     'bootstrapform',
     'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [

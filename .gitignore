@@ -6,3 +6,7 @@
 .idea/misc.xml
 gestao_rh/gestaorh_settings.py
 media
+*.bak
+*.dat
+*.pid
+*.dir
