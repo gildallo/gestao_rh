@@ -11,6 +11,10 @@ Comando para rodar o celery na aplicação:
 
 $ celery -A gestao_rh worker -l info
 
+Comando para rodar Celery Workers e Celery Beat simultaneamente.
+
+$ celery -A gestao_rh worker --beat --scheduler django --loglevel=info
+
 # Deploy em ambiente de produção conforme aula
 
 Foi criado um ambiente de produção conforme instruido pelo instrutor utilizando um linux Fedora, na pasta "Utils" 
@@ -76,6 +80,8 @@ $ docker ps
 $ docker ps -a
 - Acessar um container em execução<br>
 $ docker attach <id-ou-apelido>
+- Sair do container acessado com attach sem parar o container<br>
+$ utilizar o comandos "CRTL+P", "CRTL+Q" seguidos no terminal do container<br>
 - Salvar alterações realizadas na imagem<br>
 $ docker commit <ID/apelido> <nome-da-nova-imagem>
 
