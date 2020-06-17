@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'bootstrapform',
     'django_celery_results',
     'django_celery_beat',
+    'apps.app_antiga',
 ]
 
 MIDDLEWARE = [
@@ -67,29 +68,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'gestao_rh.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-'''
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'xxxxx',
-        'USER': 'xxxx',
-        'PASSWORD': 'xxxx',
-        'HOST': 'x.x.x.x',
-        'PORT': '5432',
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -148,6 +126,8 @@ CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
+
+DATABASE_ROUTERS = ['gestao_rh.DBRoutes.DBRoutes']
 
 try:
     from .gestaorh_settings import *
