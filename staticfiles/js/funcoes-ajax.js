@@ -32,11 +32,11 @@ function process_response(funcionarios){
     });
 }
 
-function filtraFuncionarios(){
+function filtraFuncionarios(url){
     depart_id = document.getElementById('departamentos').value;
     $.ajax({
         type: 'GET',
-        url: '/pt/filtra-funcionarios/',
+        url: url,
         data: {
             outro_param: depart_id
         },
