@@ -16,9 +16,9 @@
         Deletar
     </a>
 
-    <button {% if not object.utilizada %} style="visibility: hidden" {% endif %} onclick="utilizouHoraExtra({{ object.id }}, 0)"
+    <button {% if not object.utilizada %} style="visibility: hidden" {% endif %} onclick="utilizouHoraExtra('{% url 'utilizou_hora_extra' object.id 0 %}')"
             class="btn btn-info" type="button" id="btRetornar">Tornar utilizável</button>
-    <button {% if object.utilizada %} style="visibility: hidden" {% endif %} onclick="utilizouHoraExtra({{ object.id }}, 1)"
+    <button {% if object.utilizada %} style="visibility: hidden" {% endif %} onclick="utilizouHoraExtra('{% url 'utilizou_hora_extra' object.id 1 %}')"
             class="btn btn-info" type="button" id="btUtilizar">Marcar como utilizada</button>
 
     {% endif %}

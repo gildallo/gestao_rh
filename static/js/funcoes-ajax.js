@@ -1,10 +1,9 @@
-function utilizouHoraExtra(id, op){
-    console.log(id);
+function utilizouHoraExtra(url){
     token = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 
     $.ajax({
         type: 'POST',
-        url: '/pt/horas-extras/utilizou-hora-extra/' + id + '/' + op + '/',
+        url: url,
         data: {
             csrfmiddlewaretoken: token
         },
@@ -18,6 +17,32 @@ function utilizouHoraExtra(id, op){
                 document.getElementById("btRetornar").style.visibility = "hidden";
                 document.getElementById("btUtilizar").style.visibility = "visible";
             }
+        }
+    });
+}
+
+function process_response(funcionarios){
+    func_select = document.getElementById('funcionarios');
+    func_select.innerHTML = "";
+
+    funcionarios.forEach(function(funcionario){
+        var option = document.createElement("option");
+        option.text = funcionario.fields.nome;
+        func_select.add(option);
+    });
+}
+
+function filtraFuncionarios(){
+    depart_id = document.getElementById('departamentos').value;
+    $.ajax({
+        type: 'GET',
+        url: '/pt/filtra-funcionarios/',
+        data: {
+            outro_param: depart_id
+        },
+        success: function(result){
+            process_response(result);
+            $("#mensagem").text('Funcionarios carregados');
         }
     });
 }

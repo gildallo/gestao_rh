@@ -1,10 +1,9 @@
-function utilizouHoraExtra(id, op){
-    console.log(id);
+function utilizouHoraExtra(url){
     token = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 
     $.ajax({
         type: 'POST',
-        url: '/pt/horas-extras/utilizou-hora-extra/' + id + '/' + op + '/',
+        url: url,
         data: {
             csrfmiddlewaretoken: token
         },
