@@ -22,7 +22,7 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
-    path('', include('apps.core.urls')),
+    path('', include(('apps.core.urls', 'core'), namespace='core')),
     path('funcionarios/', include('apps.funcionarios.urls')),
     path('departamentos/', include('apps.departamentos.urls')),
     path('empresa/', include('apps.empresas.urls')),
