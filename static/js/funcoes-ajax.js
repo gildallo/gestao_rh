@@ -4,7 +4,7 @@ function utilizouHoraExtra(id, op){
 
     $.ajax({
         type: 'POST',
-        url: '/horas-extras/utilizou-hora-extra/' + id + '/' + op + '/',
+        url: '/pt/horas-extras/utilizou-hora-extra/' + id + '/' + op + '/',
         data: {
             csrfmiddlewaretoken: token
         },
