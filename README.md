@@ -1,19 +1,67 @@
-# gestao_rh
-Projeto criado pelo curso de Python e Django realizado na plataforma da Udemy
+# Gestão RH
+Projeto criado pelo curso de Python e Django realizado na plataforma da Udemy<bt>
+Este projeto pode usar qualquer ambiente que suporte as bibliotecas do arquivo requirements.txt.<br>
+Mas no curso criamos um ambiente para desenvolvimento usando o virtualenv, segue o comando para criação<br> 
+do ambiente com o virtualenv.
 
-Este projeto pode usar qualquer ambiente que suporte as bibliotecas do arquivo requirements.txt.
-
-Mas no curso criamos um ambiente para desenvolvimento usando o virtualenv, segue o comando para criação do ambiente com o virtualenv.
-
-$ python -m venv nomedoambiente
+    $ python -m venv nomedoambiente
 
 Comando para rodar o celery na aplicação:
 
-$ celery -A gestao_rh worker -l info
+    $ celery -A gestao_rh worker -l info
 
-Comando para rodar Celery Workers e Celery Beat simultaneamente.
+Comando para rodar Celery Workers e Celery Beat simultaneamente:
 
-$ celery -A gestao_rh worker --beat --scheduler django --loglevel=info
+    $ celery -A gestao_rh worker --beat --scheduler django --loglevel=info
+# Internacionalização - Tradução
+Resumo referente ao sistema de internacionalização<br>
+Para geração automática dos arquivos locale é necessário ter o gettext instalado na máquina.<br>
+Comando para instalar no MacOSX:
+
+    $ brew install gettext
+
+Alteração no settings:
+
+    LANGUAGES = (
+        ('en', _('English')),
+        ('pt', _('Portugues')),
+        ('es', _('Spanish')),
+    )
+
+    LOCALE_PATHS = (
+        os.path.join(BASE_DIR, 'locale'),
+    )
+
+    #Colocar após o middleware da sessão:
+
+    'django.middleware.locale.LocaleMiddleware',
+
+    'django.template.context_processors.i18n',
+
+Para utilizar a tradução fora do ramplate, é necessário o código abaixo na view:
+
+    from django.utils.translation import gettext_lazy as _
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_button'] = _("Employee report")
+        return context
+
+Comando para gerar o locale:
+
+    $ python manage.py makemessages -l pt
+
+Comando para compilar os arquivos locales:
+
+    $ django-admin compilemessages
+
+Colocar em todos templates que usam traducão:
+
+    {% load i18n %}
+
+Exemplo de uso simples:
+
+    {% trans "Texto a ser traduzido" %}
 
 # Deploy em ambiente de produção conforme aula
 
@@ -39,28 +87,31 @@ o deploy foi realizado em um Fedora 32, utilizando Docker, Gunicorn, Nginx, Post
 	- Por padrão os volumes ficam em /var/lib/docker/volumes/__data/django-app02>
 3. Iniciar um container com volume do app:
 	- docker run -itd -p 8001:8001 --name django-app02 --mount source=django-app02,target=/django-app02 centos-to-django
-4. Preparar e rodar a aplicação:
+4. Preparar a aplicação:
 	- Clonar a aplicação no diretório do host que corresponde ao volume.
 	- Configurar o postgresql do host para conversar com o container(liberar ip no pg_hba.conf)
 	- Configurar o settings.py (Variáveis e banco)
 	- Criei um arquivo run-deploy.sh na pasta deploy no mesmo diretório do app, com o conteúdo a seguir, 
 	as configurações de logs devem ser configuradas conforme necessidade:
-		
-	\#!/usr/bin/env bash<br>
-	cd /django-app02/gestao_rh/<br>
-	NOW=$(TZ=":America/Sao_Paulo" date +"%d-%m-%Y_%H-%M-%S")<br>
-	LOG=/django-app02/deploy/logs/logs-deploy-${NOW}.log<br>
-	echo "==================== Encerrando os processos gunicorn ====================" >> $LOG<br>
-	ps aux | grep gunicorn | awk '{print $2;}' | xargs kill -9 2>/dev/null >> $LOG<br>
-	echo "==================== Instalando requerimentos ====================" >> $LOG<br>
-	pip3 install -r requirements.txt >> $LOG<br>
-	echo "==================== Rodando migrações do banco de dados ====================" >> $LOG<br>
-	python3 manage.py migrate >> $LOG<br>
-	echo "==================== Gerando arquivos estáticos ====================" >> $LOG<br>
-	python3 manage.py collectstatic --noinput >> $LOG<br>
-	echo "==================== Iniciando o gunicorn ====================" >> $LOG<br>
-	gunicorn --bind :8001 --workers 3 --log-level debug  --error-logfile /django-app02/deploy/logs/gunicorn-error.log  --access-logfile /django-app02/deploy/logs/gunicorn-access.log gestao_rh.wsgi:application >> $LOG<br>
 
+	
+    #!/usr/bin/env bash
+	cd /django-app02/gestao_rh/
+	NOW=$(TZ=":America/Sao_Paulo" date +"%d-%m-%Y_%H-%M-%S")
+	LOG=/django-app02/deploy/logs/logs-deploy-${NOW}.log
+	echo "==================== Encerrando os processos gunicorn ====================" >> $LOG
+	ps aux | grep gunicorn | awk '{print $2;}' | xargs kill -9 2>/dev/null >> $LOG
+	echo "==================== Instalando requerimentos ====================" >> $LOG
+	pip3 install -r requirements.txt >> $LOG
+	echo "==================== Rodando migrações do banco de dados ====================" >> $LOG
+	python3 manage.py migrate >> $LOG
+	echo "==================== Gerando arquivos estáticos ====================" >> $LOG
+	python3 manage.py collectstatic --noinput >> $LOG
+	echo "==================== Iniciando o gunicorn ====================" >> $LOG
+	gunicorn --bind :8001 --workers 3 --log-level debug  --error-logfile /django-app02/deploy/logs/gunicorn-error.log  
+	--access-logfile /django-app02/deploy/logs/gunicorn-access.log gestao_rh.wsgi:application >> $LOG
+
+5. Rodando a aplicação:
 	- Inciar o container criado: docker start django-app02
 	- Conferir se os serviços utilizados estão onlines: Postgres, Redis, Nginx
 	- Rodar o arquivo run-deploy.sh: docker exec -d -w /django-app02/deploy/ django-app02 ./run-deploy.sh

@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block main %}
-    Olá {{ usuario.funcionario.nome }} - <a href="{% url 'logout' %}">Sair</a>
+    <div class="row">
+        <div class="col-sm">
+            <!-- {% trans "One of three columns" %} -->
+            {% blocktrans %}
+            My big block
+            of text
+            must go right here
+            {% endblocktrans %}
+        </div>
+    </div>
+    {% trans "Hi" %} {{ usuario.funcionario.nome }} - <a href="{% url 'logout' %}">Sair</a>
     <br>
     <a href="{% url 'list_funcionarios' %}">Gerenciar Funcionários</a>
     <br>
