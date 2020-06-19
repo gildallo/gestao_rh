@@ -95,19 +95,19 @@ o deploy foi realizado em um Fedora 32, utilizando Docker, Gunicorn, Nginx, Post
 	as configurações de logs devem ser configuradas conforme necessidade:
 
 	
-    #!/usr/bin/env bash
-	cd /django-app02/gestao_rh/
-	NOW=$(TZ=":America/Sao_Paulo" date +"%d-%m-%Y_%H-%M-%S")
-	LOG=/django-app02/deploy/logs/logs-deploy-${NOW}.log
-	echo "==================== Encerrando os processos gunicorn ====================" >> $LOG
-	ps aux | grep gunicorn | awk '{print $2;}' | xargs kill -9 2>/dev/null >> $LOG
-	echo "==================== Instalando requerimentos ====================" >> $LOG
-	pip3 install -r requirements.txt >> $LOG
-	echo "==================== Rodando migrações do banco de dados ====================" >> $LOG
-	python3 manage.py migrate >> $LOG
-	echo "==================== Gerando arquivos estáticos ====================" >> $LOG
-	python3 manage.py collectstatic --noinput >> $LOG
-	echo "==================== Iniciando o gunicorn ====================" >> $LOG
+    #!/usr/bin/env bash<br>
+	cd /django-app02/gestao_rh/<br>
+	NOW=$(TZ=":America/Sao_Paulo" date +"%d-%m-%Y_%H-%M-%S")<br>
+	LOG=/django-app02/deploy/logs/logs-deploy-${NOW}.log<br>
+	echo "==================== Encerrando os processos gunicorn ====================" >> $LOG<br>
+	ps aux | grep gunicorn | awk '{print $2;}' | xargs kill -9 2>/dev/null >> $LOG<br>
+	echo "==================== Instalando requerimentos ====================" >> $LOG<br>
+	pip3 install -r requirements.txt >> $LOG<br>
+	echo "==================== Rodando migrações do banco de dados ====================" >> $LOG<br>
+	python3 manage.py migrate >> $LOG<br>
+	echo "==================== Gerando arquivos estáticos ====================" >> $LOG<br>
+	python3 manage.py collectstatic --noinput >> $LOG<br>
+	echo "==================== Iniciando o gunicorn ====================" >> $LOG<br>
 	gunicorn --bind :8001 --workers 3 --log-level debug  --error-logfile /django-app02/deploy/logs/gunicorn-error.log  
 	--access-logfile /django-app02/deploy/logs/gunicorn-access.log gestao_rh.wsgi:application >> $LOG
 
