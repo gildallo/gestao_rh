@@ -68,53 +68,30 @@ Exemplo de uso simples:
 Foi criado um ambiente de produção conforme instruido pelo instrutor utilizando um linux Fedora, na pasta "Utils" 
 encontra-se os exemplos de configuração usado para o gunicorn e nginx.
 
-
 # Deploy em ambiente de produção com Docker
 
 Foi realizados estudos para implementar o projeto em um ambiente de produção diferenciado, 
 o deploy foi realizado em um Fedora 32, utilizando Docker, Gunicorn, Nginx, PostgreSQL.
 
 * Rotina utilizada no preparo do ambiente de produção
-1. Preparar uma imagem com os requisitos de serviços:
-	- Baixar a imagem do centos 8 do repositório oficial do docker.
-	- Criar um container, atualizar o linux no container e instalar o nano.
-	- Instalar o python 3: dnf install python3
-	- Instalar o gunicorn no container: pip3 install gunicorn
-	- comitar o container para uma nova imagem (Criei com o nome "centos-to-django"")
-2. Cria o volume para aplicação:
-	- docker volume create django-app02
+1. Construir uma imagem com os requisitos mínimos usando o Dockerfile da pasta deploy, usar o comando "docker build" no mesmo diretório do arquivo Dockerfile:
+	- $ docker build -t centos-to-django .
+2. Cria o volume para aplicação e ajustar configurações necessárias:
+	- docker volume create django-app-01
 	- aplicar as permissões no diretório do volume no host para o usuário 
-	- Por padrão os volumes ficam em /var/lib/docker/volumes/__data/django-app02>
-3. Iniciar um container com volume do app:
-	- docker run -itd -p 8001:8001 --name django-app02 --mount source=django-app02,target=/django-app02 centos-to-django
-4. Preparar a aplicação:
-	- Clonar a aplicação no diretório do host que corresponde ao volume.
+	- Por padrão os volumes ficam em /var/lib/docker/volumes/__data/django-app-01
+    - Clonar a aplicação no volume criado.
 	- Configurar o postgresql do host para conversar com o container(liberar ip no pg_hba.conf)
 	- Configurar o settings.py (Variáveis e banco)
-	- Criei um arquivo run-deploy.sh na pasta deploy no mesmo diretório do app, com o conteúdo a seguir, 
-	as configurações de logs devem ser configuradas conforme necessidade:
-
-	
-    #!/usr/bin/env bash<br>
-	cd /django-app02/gestao_rh/<br>
-	NOW=$(TZ=":America/Sao_Paulo" date +"%d-%m-%Y_%H-%M-%S")<br>
-	LOG=/django-app02/deploy/logs/logs-deploy-${NOW}.log<br>
-	echo "==================== Encerrando os processos gunicorn ====================" >> $LOG<br>
-	ps aux | grep gunicorn | awk '{print $2;}' | xargs kill -9 2>/dev/null >> $LOG<br>
-	echo "==================== Instalando requerimentos ====================" >> $LOG<br>
-	pip3 install -r requirements.txt >> $LOG<br>
-	echo "==================== Rodando migrações do banco de dados ====================" >> $LOG<br>
-	python3 manage.py migrate >> $LOG<br>
-	echo "==================== Gerando arquivos estáticos ====================" >> $LOG<br>
-	python3 manage.py collectstatic --noinput >> $LOG<br>
-	echo "==================== Iniciando o gunicorn ====================" >> $LOG<br>
-	gunicorn --bind :8001 --workers 3 --log-level debug  --error-logfile /django-app02/deploy/logs/gunicorn-error.log  
-	--access-logfile /django-app02/deploy/logs/gunicorn-access.log gestao_rh.wsgi:application >> $LOG
-
-5. Rodando a aplicação:
-	- Inciar o container criado: docker start django-app02
 	- Conferir se os serviços utilizados estão onlines: Postgres, Redis, Nginx
-	- Rodar o arquivo run-deploy.sh: docker exec -d -w /django-app02/deploy/ django-app02 ./run-deploy.sh
+3. Foi utilizado a aplicação Portainer para gerenciar o docker, use as seguintes opções na criação do container:
+    - Usar a imagem centos-to-django
+    - port publishing: 8001:8001
+    - EntryPoint: deploy/run-app.sh
+    - workking dir: /django-app-01/gestao_rh
+    - Console: (-i -t)
+    - Volume no container: /django-app-01
+4. Configurar NGINX:
 	- Configurar o virtualhost no nginx (É importante verificar a permissão dos diretos dos arquivos estáticos, toda a arvore deve estar acessível).
 	- Recarregar configurações do nginx: nginx -s reload
 	
